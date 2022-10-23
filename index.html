@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Survey Page</title>
+	<link rel="icon" href="ressource/icon.ico">
+	<link href="code/index.css" rel="stylesheet">
+
+	<!-- Libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+
+	<!-- Local Scripts -->
+	<script src="code/index.js"></script>
+	<script src="code/global.js"></script>
+	<script src="code/slides.js"></script>
+	<script src="code/scale.js"></script>
+	<script src="code/valence.js"></script>
+	<script src="code/prediction.js"></script>
+	<script src="code/warmup.js"></script>
+	<script src="code/main-experiment.js"></script>
+	<script src="code/dropbox_saver.js"></script>
+	<script src="code/logger.js"></script>
+	<script src="code/initialize.js"></script>
+	<script>
+		async function startExperiment() {
+			if (warmupChoice) {
+				await showSlide(welcomeSlide);
+				await startWarmup();
+			}
+			if (trainingChoice) {
+				await showSlide(prelimInstructions);
+				await showSlide(nextSequence);
+				await startTraining();
+			}
+			if (!participantFail) {
+				if (mainExpChoice) {
+					await showSlide(mainExperimentInstructions);
+					await showSlide(nextSequence);
+					await startMainExperiment();
+				}
+
+				if (finalValenceChoice) {
+					await showSlide(valenceInstructions);
+					await showSlide(nextSequence);
+					await runFinalValence();
+				}
+			}
+
+			await showSlide(debriefA);
+			await showSlide(debriefB);
+			
+			showSlideNoClick(loadingDataSlide);
+			
+			setTimeout(() => {
+				exportTrainData();
+
+				if (!participantFail) {
+					exportTestData();
+					exportRatingData();
+				}
+				
+				window.location.href = "code/end_of_survey.html";
+			});
+		}
+	</script>
+</head>
+
+<body onload="initialize();">
+	<form id="userForm">
+		<div id="consent">
+			<img id="consent-form-image" width="100%">
+		</div>
+		<label>
+			<input type="checkbox" style="width:20px;height:20px" onchange="toggleStartExperimentButton(this.checked);">
+			I agree to the above conditions. <br />
+		</label>
+
+		<br>Subject Info<br>
+		Enter your Age (18-50):
+		<input min="18" max="50" type="number" name="age"><br>
+		Gender:<br>
+		<label>
+			<input type="radio" name="gender" value="Male">
+			Male<br>
+		</label>
+		<label>
+			<input type="radio" name="gender" value="Female">
+			Female<br>
+		</label>
+		<label>
+			<input type="radio" name="gender" value="N/A">
+			I prefer not to answer<br>
+		</label>
+		<br><button onclick="getUserData();" type="button" id="start-experiment-btn">Start Experiment</button>
+	</form>
+	<canvas width="1024" height="768" id="canvas"></canvas>
+</body>
+
+</html>

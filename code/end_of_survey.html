@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment Completed</title>
+    <style>
+        body {
+            background-color: #172D58;
+        }
+
+        #codeContainer {
+            position: absolute;
+            width: 60%;
+            height: 20%;
+            left: 20%;
+            top: 40%;
+        }
+
+        #codeButton {
+            position: relative;
+            left: 39%;
+            top: 30%;
+            background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+            background-color: #ededed;
+            border-radius: 26px;
+            display: inline-block;
+            cursor: pointer;
+            color: navy;
+            font-family: Arial;
+            font-size: 20px;
+            padding: 26px 76px;
+            text-decoration: none;
+            -webkit-touch-callout: text;
+            -webkit-user-select: text;
+            -khtml-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        #codeButton:hover {
+            background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+            background-color: #bab1ba;
+        }
+
+        #codeButton:active {
+            position: relative;
+            top: 31%;
+        }
+
+        #codeCopiedText {
+            position: absolute;
+            width: 30%;
+            height: 20%;
+            left: 41%;
+            top: 60%;
+            color: white;
+            font-size: 18pt;
+            font-family: "Comic Sans";
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        function copyTextToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        function codeBtnOnClick() {
+            var btn = document.getElementById("codeButton");
+            btn.innerHTML = localStorage.getItem("USER_ID");
+            copyTextToClipboard(btn.innerHTML);
+
+            var lbl = document.getElementById("codeCopiedText");
+            lbl.style.visibility = "visible";
+        }
+    </script>
+</head>
+
+<body>
+    <div id="codeContainer">
+        <a href="#" id="codeButton" onclick="codeBtnOnClick();">Click to reveal completion code</a>
+    </div>
+    <label id="codeCopiedText">Code has been copied to clipboard!</label>
+</body>
+
+</html>

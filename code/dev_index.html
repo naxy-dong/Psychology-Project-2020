@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Survey Page</title>
+	<link href="index.css" rel="stylesheet">
+
+	<!-- Libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+
+	<!-- Local Scripts -->
+	<script src="index.js"></script>
+	<script src="global.js"></script>
+	<script src="slides.js"></script>
+	<script src="scale.js"></script>
+	<script src="valence.js"></script>
+	<script src="prediction.js"></script>
+	<script src="warmup.js"></script>
+	<script src="main-experiment.js"></script>
+	<script src="dropbox_saver.js"></script>
+	<script src="logger.js"></script>
+	<script>
+		async function startExperiment() {
+			if (warmupChoice) {
+				await showSlide(welcomeSlide);
+				await startWarmup();
+			}
+			if (trainingChoice) {
+				await showSlide(prelimInstructions);
+				await showSlide(nextSequence);
+				await startTraining();
+			}
+			if (mainExpChoice) {
+				await showSlide(mainExperimentInstructions);
+				await showSlide(nextSequence);
+				await startMainExperiment();
+			}
+			if (finalValenceChoice) {
+				await showSlide(valenceInstructions);
+				await showSlide(nextSequence);
+				await runFinalValence();
+				await showSlide(debriefA);
+				await showSlide(debriefB);
+			}
+			exportTrainData();
+			exportTestData();
+			exportRatingData();
+		}
+	</script>
+</head>
+
+<body onload="initialize();">
+	<form id="userForm">
+		Exp Parameters<br>
+		ID: <input type="text" name="id"><br>
+		Counterbalancing:<br>
+		<label>
+			<input type="radio" name="choice" value="VPPV">
+			Valence/Prediction then Prediction/Valence<br>
+		</label>
+		<label>
+			<input type="radio" name="choice" value="PVVP">
+			Prediction/Valence then Valence/Prediction<br>
+		</label>
+		<br>Subject Info<br>
+		Enter your Age (18-50):
+		<input min="18" max="50" type="number" name="age"><br>
+		Gender:<br>
+		<label>
+			<input type="radio" name="gender" value="Male">
+			Male<br>
+		</label>
+		<label>
+			<input type="radio" name="gender" value="Female">
+			Female<br>
+		</label>
+		<label>
+			<input type="radio" name="gender" value="N/A">
+			I prefer not to answer<br>
+		</label>
+		<br><button onclick="getUserData();" type="button">Start Experiment</button>
+	</form>
+	<canvas width="1024" height="768" id="canvas"></canvas>
+</body>
+
+</html>
